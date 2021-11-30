@@ -1,0 +1,62 @@
+---
+title: "assignment 6 task 2"
+author: "Hollie Pennington"
+date: "11/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(broom)
+```
+
+```{r}
+#read in data and convert to lower snake case
+survey <- read_csv(here("data", "conservation_survey.csv")) %>% 
+  clean_names()
+```
+
+```{r}
+#make subset set only keeping conservative or liberal values 
+
+c_or_l <- survey %>%
+  filter(pol_or %in% c("1", "2", "3", "5", "6", "7")) %>% 
+  #convert to words instead of value
+  mutate(pol_or = case_when(
+    pol_or %in% c(1,2,3) ~ "Liberal",
+    pol_or %in% c(5,6,7) ~ "Conservative"
+  )) %>% #
+  mutate(env_id = case_when(
+    env_id %in% 1 ~ "Yes", 
+    env_id %in% 2 ~ "No", 
+    env_id %in% 3 ~ "Unsure"
+  ))
+```
+
+```{r}
+#find count
+c_or_l %>% 
+  count(pol_or) 
+```
+
+```{r}
+#make table of count vs env id
+pol_count <- c_or_l %>% 
+  janitor::tabyl(pol_or, env_id) %>% 
+#add proportions 
+  janitor::adorn_percentages() %>% 
+  adorn_pct_formatting(digits = 2) %>% 
+  adorn_ns()
+```
+ 
+```{r}
+#convert to contingency table
+pol_count_ct <- pol_count %>%
+  column_to_rownames(var = "pol_or")
+```
+
+
