@@ -5,8 +5,8 @@ date: "11/29/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE, echo = FALSE, message = FALSE, warning = FALSE, fig.align = 'center'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align = 'center')
 #install packages
 library(tidyverse)
 library(here)
@@ -86,4 +86,4 @@ x2_pol_count
 x2_pol_tidy <- broom::tidy(x2_pol_count)
 ```
 
-There is a significant association between political party and identifying as an environmentalist ($\chi$^2^(`r x2_pol_tidy$parameter`) = `r x2_pol_tidy$statistic`, *p* = `r x2_pol_tidy$p.value`). 
+There is a significant association between political party and identifying as an environmentalist ($\chi$^2^(`r x2_pol_tidy$parameter`) = `r x2_pol_tidy$statistic`, *p* = `r round(x2_pol_tidy$p.value,2)`).
