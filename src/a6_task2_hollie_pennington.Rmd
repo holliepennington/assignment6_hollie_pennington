@@ -77,4 +77,13 @@ pol_count_ct <- pol_count %>%
 pol_count_ct
 ```
 
+```{r}
+# Chi-square test 
+x2_pol_count <- chisq.test(pol_count_ct)
+x2_pol_count
 
+#put in tidy format for inline referencing 
+x2_pol_tidy <- broom::tidy(x2_pol_count)
+```
+
+There is a significant association between political party and identifying as an environmentalist ($\chi$^2^(`r x2_pol_tidy$parameter`) = `r x2_pol_tidy$statistic`, *p* = `r x2_pol_tidy$p.value`). 
