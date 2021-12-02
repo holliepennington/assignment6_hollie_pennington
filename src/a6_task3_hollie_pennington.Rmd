@@ -1,0 +1,42 @@
+---
+title: "Task 3"
+author: "Hollie Pennington"
+date: "12/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(broom)
+library(kableExtra)
+library(ggbeeswarm)
+```
+
+```{r}
+#read in data, clean up data, and select variables for project
+lizards_2 <- read_csv(here("data", "lizards.csv")) %>% 
+  clean_names() %>% 
+  select(spp, sex, total_length) %>% 
+  filter(sex == "F") %>% 
+  filter(spp == c("CNUN", "CNTE"))
+```
+
+```{r}
+ggplot() + 
+  geom_beeswarm(data = lizards_2, 
+                aes(x = spp, 
+                    y = total_length, 
+                    color = spp), 
+                show.legend = FALSE)+ 
+  labs(title = "Length of female lizards by species", 
+       x = "Species", 
+       y = "Total Length (mm)") + 
+    scale_x_discrete(labels = c("CNTE" = "C. tessalatus", 
+                              "CNUN" = "C. uniparens")) + 
+  theme_minimal()
+```
+
+
