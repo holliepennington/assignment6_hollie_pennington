@@ -13,6 +13,7 @@ library(janitor)
 library(broom)
 library(kableExtra)
 library(ggbeeswarm)
+library(effsize)
 ```
 
 ```{r}
@@ -70,4 +71,22 @@ ggplot(data = lizards_2, aes(sample = total_length)) +
   facet_wrap(~ spp)
 
 # depending on the bin size the data is normally distributed. The smaller the bin size the more skewed to the left the C. tessaltus is. 
+```
+
+```{r}
+#statistical testing: cohen's d 
+# "CNUN" = "C. uniparens", 
+# "CNTE" = "C. tessalatus"
+
+CNUN <- lizards_2 %>% 
+  filter(spp == "C. uniparens") %>% 
+  pull(total_length)
+
+CNTE <- lizards_2 %>% 
+  filter(spp == "C. tessalatus") %>% 
+  pull(total_length)
+
+cd_lizards <- cohen.d(CNUN, CNTE, na.rm = TRUE)
+
+cd_lizards
 ```
