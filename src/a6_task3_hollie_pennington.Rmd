@@ -21,7 +21,11 @@ lizards_2 <- read_csv(here("data", "lizards.csv")) %>%
   clean_names() %>% 
   select(spp, sex, total_length) %>% 
   filter(sex == "F") %>% 
-  filter(spp == c("CNUN", "CNTE"))
+  filter(spp == c("CNUN", "CNTE")) %>% 
+  mutate(spp = case_when(
+    spp == "CNUN" ~ "C. uniparens", 
+    spp == "CNTE" ~ "C. tessalatus"
+  ))
 ```
 
 ```{r}
@@ -34,9 +38,36 @@ ggplot() +
   labs(title = "Length of female lizards by species", 
        x = "Species", 
        y = "Total Length (mm)") + 
-    scale_x_discrete(labels = c("CNTE" = "C. tessalatus", 
-                              "CNUN" = "C. uniparens")) + 
   theme_minimal()
 ```
 
+```{r}
+#summary table with mean, standard deviation, and sample size 
 
+lizards_stats <- lizards_2 %>% 
+  group_by(spp) %>% 
+  summarise(mean = mean(total_length, na.rm = TRUE),
+            standard_deviation = sd(total_length, na.rm = TRUE),
+            sample_size = n())
+```
+
+```{r}
+#make table into table can see on knitted document 
+lizards_stats %>%
+  kable(col.names = c("Species", "Mean (mm)", "Standard Deviation (mm)", "Sample Size"), 
+        caption = "<b> Table 1: <b> The table compares the mean (mm), standard deviation, and sample size between female lizard species.") %>% 
+          kable_styling(full_width = FALSE)
+```
+
+```{r, include = FALSE}
+# exploratory plots 
+ggplot(data = lizards_2, aes (x = total_length)) + 
+  geom_histogram(bins = 30) + 
+  facet_wrap(~ spp)
+
+ggplot(data = lizards_2, aes(sample = total_length)) + 
+  geom_qq() + 
+  facet_wrap(~ spp)
+
+# depending on the bin size the data is normally distributed. The smaller the bin size the more skewed to the left the C. tessaltus is. 
+```
