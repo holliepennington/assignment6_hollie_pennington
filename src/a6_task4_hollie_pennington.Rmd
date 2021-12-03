@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center")
 library(tidyverse)
 library(here)
 library(janitor)
@@ -34,7 +34,7 @@ ggplot(data = mono_lake, aes(x = year, y = lake_level_feet_above_sea_level )) +
              color = "yellow", 
              size = 1.5, 
              alpha = 0.5) +
-  labs (title = "Annual water level at Mono Lake", 
+  labs (title = "Annual water level at Mono Lake (CA)", 
         x = "Year", 
         y = "Feet above sea level") + 
   theme_test() + 

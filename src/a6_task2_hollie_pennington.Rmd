@@ -1,13 +1,13 @@
 ---
-title: "assignment 6 task 2"
+title: "Assignment 6 Task 2"
 author: "Hollie Pennington"
 date: "11/29/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE, echo = FALSE, message = FALSE, warning = FALSE, fig.align = 'center'}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align = 'center')
-#install packages
+```{r setup, include=FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+# install packages
 library(tidyverse)
 library(here)
 library(janitor)
@@ -15,14 +15,20 @@ library(broom)
 library(kableExtra)
 ```
 
+## Exploring the relationship between people who self-identify as environmentalist, liberals, and conservatives 
+
+### Introduction 
+This reports aims to find if there is a significant connection between people who self-identify with either being conservative or liberal and whether or not they identify as an environmentalist. Andrew Forests LTER site and Chelsea Batavia collected the data via survey in 2019. The surveyed contained 1,331 anonymous participants across the United States of America. For the purposes of this report, all people who did not identify in the binary of conservative or liberal were omitted. I conducted a chi-squared test with two degrees of freedom to determine if there is a significant relationship between the two political groups. 
+
+
 ```{r}
-#read in data and convert to lower snake case
+# read in data and convert to lower snake case
 survey <- read_csv(here("data", "conservation_survey.csv")) %>% 
   clean_names()
 ```
 
 ```{r}
-#make subset set only keeping conservative or liberal values 
+# make subset set only keeping conservative or liberal values 
 
 c_or_l <- survey %>%
   select ("env_id", "pol_or") %>% 
@@ -41,17 +47,17 @@ c_or_l <- survey %>%
 ```
 
 ```{r}
-#find count
+# find count
 c_or_l %>% 
   count(pol_or) 
 ```
 
 ```{r}
-#make table of count vs env id
+# make table of count vs env id
 pol_count <- c_or_l %>% 
   janitor::tabyl(pol_or, env_id) 
 
-#add proportions
+# add proportions
 pol_pc <- pol_count %>% 
   janitor::adorn_percentages() %>% 
   adorn_pct_formatting(digits = 2) %>% 
@@ -59,22 +65,21 @@ pol_pc <- pol_count %>%
 ```
 
 ```{r}
-#use KableExtra to create table that will show up in knitted document
+# use KableExtra to create table that will show up in knitted document
 pol_pc %>% 
   kable(col.names = c("Political Party", 
                       "No", 
                       "Unsure",
                       "Yes"), 
-        caption = "**Table 1: Political Affiliation and Environmentalism:** Below shows a the amount of conservatives and liberals who self identify as an environmentalist. Data was collected from an online survery and all political affiliations that were not liberal or conservative were excluded from the table. The counts represent that amount of people who answered the question or percent represents the proportions of the specific political group."
-  )
+        caption = "**Table 1: Political Affiliation and Environmentalism:** Below shows a the amount of conservatives and liberals who self identify as an environmentalist. The counts represent that amount of people who answered the question or percent represents the proportions of the specific political group."
+  ) %>% 
+   kable_styling(full_width = FALSE)
 ```
-
  
 ```{r}
-#convert to contingency table
+# convert to contingency table
 pol_count_ct <- pol_count %>%
-  column_to_rownames(var = "pol_or")
-pol_count_ct
+  column_to_rownames(var = "pol_or") 
 ```
 
 ```{r}
@@ -86,4 +91,8 @@ x2_pol_count
 x2_pol_tidy <- broom::tidy(x2_pol_count)
 ```
 
-There is a significant association between political party and identifying as an environmentalist ($\chi$^2^(`r x2_pol_tidy$parameter`) = `r x2_pol_tidy$statistic`, *p* = `r round(x2_pol_tidy$p.value,2)`).
+### Summary 
+There is a significant association between political party and identifying as an environmentalist ($\chi$^2^(`r x2_pol_tidy$parameter`) = `r x2_pol_tidy$statistic`, *p* = `r round( x2_pol_tidy$p.value,2)`). Liberals self-identify as environmentalist more often then conservatives. 
+
+#### Citation
+Andrews Forest LTER Site and C. Batavia. 2019. Influences on charitable giving for conservation: Online survey data of 1,331 respondents across the US, August 2017 ver 3. Environmental Data Initiative. 
