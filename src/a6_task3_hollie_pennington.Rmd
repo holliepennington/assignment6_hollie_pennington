@@ -1,12 +1,12 @@
 ---
-title: "Task 3"
+title: "Assignment 6 Task 3"
 author: "Hollie Pennington"
 date: "12/1/2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
 library(tidyverse)
 library(here)
 library(janitor)
@@ -15,6 +15,11 @@ library(kableExtra)
 library(ggbeeswarm)
 library(effsize)
 ```
+
+## Exploring the relationship between female lizard's length and species 
+
+### Introduction 
+This report aims to discover if there is a significant relationship between female lizard length and lizard species. The two species evaluated in this report are *C. uniparens* and *C. tessalatus*. David Lightfoot collected the data in 2017 from San Andres National Wildlife Refuge. To compared the data using a Cohen's D test. 
 
 ```{r}
 #read in data, clean up data, and select variables for project
@@ -39,8 +44,12 @@ ggplot() +
   labs(title = "Length of female lizards by species", 
        x = "Species", 
        y = "Total Length (mm)") + 
-  theme_minimal()
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_text(face = "italic"))
 ```
+
+Figure 1: A comparison between the length of female *C. tessalatus* and *C. uniparens* lizards. *C. tessalatus* has a higher range of length and shows that they are often longer than *C. uniparens*. 
 
 ```{r}
 #summary table with mean, standard deviation, and sample size 
@@ -73,8 +82,8 @@ ggplot(data = lizards_2, aes(sample = total_length)) +
 # depending on the bin size the data is normally distributed. The smaller the bin size the more skewed to the left the C. tessaltus is. 
 ```
 
-```{r}
-#statistical testing: cohen's d 
+```{r, include = FALSE}
+# statistical testing: cohen's d 
 # "CNUN" = "C. uniparens", 
 # "CNTE" = "C. tessalatus"
 
@@ -89,4 +98,15 @@ CNTE <- lizards_2 %>%
 cd_lizards <- cohen.d(CNUN, CNTE, na.rm = TRUE)
 
 cd_lizards
+
+# run t test 
+
+ttest_lizards <- t.test(CNUN, CNTE)
+ttest_lizards
 ```
+
+### Summary 
+The effsize (Coden's d = `r round(cd_lizards$estimate,2)`) shows there is a large negative correlation between the two species of lizards. The difference in means between the length of the lizards species is `r round(ttest_lizards$estimate[1],2)` with *C. tessalatus* having the larger mean.  
+
+#### Citation 
+Lightfoot, D. 2017. Lizard pitfall trap data (LTER-II, LTER-III) ver 36. Environmental Data Initiative. https://doi.org/10.6073/pasta/ff37b4cace16a9943575f3fd7067064e 

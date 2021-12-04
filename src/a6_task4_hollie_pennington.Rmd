@@ -1,9 +1,10 @@
 ---
-title: "Task 4"
+title: "Assignment 6 Task 4"
 author: "Hollie Pennington"
 date: "12/2/2021"
 output: html_document
 ---
+#### Annual Water levels in Mono Lake (CA)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center")
@@ -11,6 +12,7 @@ library(tidyverse)
 library(here)
 library(janitor)
 ```
+
 
 ```{r}
 mono_lake <- read_csv(here("data", "mono_lake_annual_levels.csv"), 
@@ -47,7 +49,7 @@ ggplot(data = mono_lake, aes(x = year, y = lake_level_feet_above_sea_level )) +
   theme(panel.border = element_rect(color = "darkblue")) + 
   theme(panel.background = element_rect("grey"))
 ```
-
+Figure 1: The graphs shows the feet above sea level at Mono Lake (CA) from 1850 to 2017. The orange line is at 6,377 feet above water level. When water level is below the orange line, land bridges form between the islands and the mainland, giving predators the opportunity to hunt in bird nesting sites. The black dotted line at 1987 is the year *The Mono Basic Ecosystem: Effects of Changing Lake Levels* by The Mono Basin Ecosystem Study Committee was published. The report found that at 6350 feet (the yellow line) the salinity of the lake would increase to dangerous levels. The salinity would be 120 g/L and would adversely affect bird's food sources (brine shrimp and brine flies).  
 
 
 
